@@ -88,6 +88,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Flask for the web framework.
 - CSS Glassmorphism for a modern UI effect.
 
-```
-
-You can copy and paste this Markdown text into your `README.md` file for GitHub.
