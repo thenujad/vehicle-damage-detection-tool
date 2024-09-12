@@ -1,0 +1,57 @@
+# Python
+*.pyc
+__pycache__/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Flask
+instance/
+.env
+
+# OpenCV
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.gif
+*.tif
+*.tiff
+*.pbm
+*.pgm
+*.ppm
+*.sr
+*.ras
+*.jp2
+*.webp
+*.hdr
+*.exr
+*.dng
+*.nef
+*.cr2
+*.crw
+*.arw
+*.dcr
+*.dng
+*.erf
+*.raf
+*.raw
+*.rw2
+*.mrw
+*.nrw
+*.orf
+*.pef
+*.ptx
+*.srw
+*.x3f
+
+# IDE/Editor specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
