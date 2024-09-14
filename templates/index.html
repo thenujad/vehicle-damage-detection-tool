@@ -15,15 +15,16 @@
             <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
                 <label for="file-upload" class="custom-file-upload">Upload Image</label>
                 <input id="file-upload" type="file" name="file" required />
-
+                <br><br><br>
                 <label for="technique">Choose Processing Technique:</label>
                 <select id="technique" name="technique">
                     <option value="contour">Contour Detection</option>
                     <option value="canny">Canny Edge Detection</option>
                     <option value="sobel">Sobel Edge Detection</option>
                 </select>
-                
+                <br><br>
                 <button type="submit">Process Image</button>
+                <br><br><br>
             </form>
 
             <!-- Display Processed Image -->
@@ -44,7 +45,7 @@
         <div class="gallery">
             <h2>Recently Processed Images</h2>
             <div class="image-thumbnails">
-                <img src="{{ url_for('static', filename='uploads/image1.jpg') }}" alt="Image 1">
+                <img src="{{ url_for('static', filename='uploads/Thenuja.jpg') }}" alt="Image 1">
                 <img src="{{ url_for('static', filename='uploads/image2.jpg') }}" alt="Image 2">
             </div>
         </div>
