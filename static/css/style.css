@@ -15,20 +15,25 @@ body {
 
 .container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     height: 100%;
 }
 
 .glass-box {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 16px;
     padding: 30px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
     text-align: center;
     color: #fff;
+    transition: all 0.3s ease;
+}
+
+.glass-box:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 .glass-box h1 {
@@ -36,10 +41,6 @@ body {
     font-size: 2rem;
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-.glass-box form {
-    margin-bottom: 20px;
 }
 
 .custom-file-upload {
@@ -83,4 +84,33 @@ button:hover {
     width: 100%;
     max-width: 500px;
     border-radius: 12px;
+}
+
+.gallery {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.gallery h2 {
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.image-thumbnails {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.image-thumbnails img {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.image-thumbnails img:hover {
+    transform: scale(1.1);
 }
