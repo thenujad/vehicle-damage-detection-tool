@@ -5,42 +5,54 @@
 }
 
 body {
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background: linear-gradient(135deg, #61e2ff, #d633ff);
     font-family: 'Arial', sans-serif;
+    height: 100vh;
+    overflow: hidden; /* Disable scrolling */
 }
 
-.container {
+.main-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+}
+
+.left-panel, .right-panel {
+    width: 50%;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
-}
-
-.glass-box {
-    background: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    padding: 30px;
     backdrop-filter: blur(12px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden; /* Keep everything in one view */
+}
+
+.left-panel {
+    margin-right: 20px;
+}
+
+.right-panel {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     text-align: center;
-    color: #fff;
-    transition: all 0.3s ease;
 }
 
-.glass-box:hover {
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-}
-
-.glass-box h1 {
-    margin-bottom: 20px;
-    font-size: 2rem;
+h1, h2, h3, p {
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+    margin-bottom: 30px;
 }
 
 .custom-file-upload {
@@ -76,24 +88,14 @@ button:hover {
     color: #ff6f61;
 }
 
-.image-box {
-    margin-top: 20px;
-}
-
 .image-box img {
     width: 100%;
     max-width: 500px;
     border-radius: 12px;
 }
 
-.gallery {
-    margin-top: 40px;
-    text-align: center;
-}
-
 .gallery h2 {
-    color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    margin-top: 20px;
 }
 
 .image-thumbnails {
@@ -113,4 +115,16 @@ button:hover {
 
 .image-thumbnails img:hover {
     transform: scale(1.1);
+}
+
+ul {
+    list-style: none;
+    margin-top: 20px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+#loading img {
+    width: 50px;
+    height: 50px;
 }
