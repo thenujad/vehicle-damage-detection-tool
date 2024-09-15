@@ -1,12 +1,14 @@
 import cv2
 import os
 import numpy as np
-import time  # To calculate processing time
+import time
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
+from fpdf import FPDF
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['REPORT_FOLDER'] = 'static/reports'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
@@ -33,6 +35,7 @@ def upload_file():
         technique = request.form.get('technique')
         message = ""
         details = {}
+        damage_info = {}
 
         if technique == 'canny':
             details = process_image_with_canny(filepath)
@@ -44,7 +47,22 @@ def upload_file():
             details = process_image(filepath)
             message = "Contour Detection applied successfully."
 
-        return render_template('index.html', filename=filename, message=message, details=details)
+        if details:
+            # Assuming that the image is in BGR format
+            image = cv2.imread(filepath)
+            masked_image = mask_non_damage_areas(image)
+            contours, _ = cv2.findContours(cv2.cvtColor(masked_image, cv2.COLOR_BGR2GRAY), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            severity, damage_percentage = calculate_damage_severity(contours, image.shape)
+            damage_info = {
+                'severity': severity,
+                'damage_percentage': damage_percentage,
+                'report_filename': generate_report(filepath, {
+                    'severity': severity,
+                    'damage_percentage': damage_percentage
+                })
+            }
+        
+        return render_template('index.html', filename=filename, message=message, details=details, damage_info=damage_info)
 
     return redirect(request.url)
 
@@ -104,5 +122,45 @@ def sobel_edge_detection(filepath):
         'processing_time': round(end_time - start_time, 2)
     }
 
+def mask_non_damage_areas(image):
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # Define color range for car body (adjust based on your dataset)
+    lower_body = np.array([0, 0, 50])  # Adjust based on the car body color
+    upper_body = np.array([180, 255, 255])
+    mask = cv2.inRange(hsv_image, lower_body, upper_body)
+    masked_image = cv2.bitwise_and(image, image, mask=mask)
+    return masked_image
+
+def calculate_damage_severity(contours, image_shape):
+    damage_area = sum([cv2.contourArea(c) for c in contours])
+    image_area = image_shape[0] * image_shape[1]
+    damage_percentage = (damage_area / image_area) * 100
+    if damage_percentage < 5:
+        severity = 'Minor'
+    elif damage_percentage < 15:
+        severity = 'Moderate'
+    else:
+        severity = 'Severe'
+    return severity, damage_percentage
+
+def generate_report(image_path, damage_info):
+    report_filename = "damage_report.pdf"
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    pdf.cell(200, 10, txt="Vehicle Damage Report", ln=True, align='C')
+    pdf.cell(200, 10, txt=f"Image File: {os.path.basename(image_path)}", ln=True)
+    pdf.cell(200, 10, txt=f"Damage Severity: {damage_info['severity']}", ln=True)
+    pdf.cell(200, 10, txt=f"Damage Percentage: {damage_info['damage_percentage']}%", ln=True)
+
+    pdf_output_path = os.path.join(app.config['REPORT_FOLDER'], report_filename)
+    pdf.output(pdf_output_path)
+    return report_filename
+
 if __name__ == '__main__':
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
+    if not os.path.exists(app.config['REPORT_FOLDER']):
+        os.makedirs(app.config['REPORT_FOLDER'])
     app.run(debug=True)

@@ -11,7 +11,7 @@ body {
     background: linear-gradient(135deg, #61e2ff, #d633ff);
     font-family: 'Arial', sans-serif;
     height: 100vh;
-    overflow: hidden; /* Disable scrolling */
+    overflow: hidden;
 }
 
 .main-container {
@@ -31,7 +31,7 @@ body {
     border-radius: 16px;
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    overflow: hidden; /* Keep everything in one view */
+    overflow: hidden;
 }
 
 .left-panel {

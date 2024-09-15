@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Object Boundary Detection</title>
+    <title>Vehicle Damage Detection Tool</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -11,63 +11,61 @@
         <!-- Left Panel: Upload Form -->
         <div class="left-panel">
             <div class="glass-box">
-                <h1>Object Boundary Detection Tool</h1>
+                <h1>Vehicle Damage Detection Tool</h1>
 
                 <!-- Form to Upload File -->
                 <form action="{{ url_for('upload_file') }}" method="POST" enctype="multipart/form-data">
-                    <label for="file-upload" class="custom-file-upload">Upload Image</label>
+                    <label for="file-upload" class="custom-file-upload">Upload Accident Image</label>
                     <input id="file-upload" type="file" name="file" required />
-                    <br><br>
+                    <br><br><br>
                     <label for="technique">Choose Processing Technique:</label>
+                
                     <select id="technique" name="technique">
                         <option value="contour">Contour Detection</option>
                         <option value="canny">Canny Edge Detection</option>
                         <option value="sobel">Sobel Edge Detection</option>
                     </select>
                     <br><br>
-                    <button type="submit">Process Image</button>
+                    <button type="submit">Analyze Damage</button>
+                    <br><br><br>
                 </form>
 
-                <!-- Loading Animation -->
-                <div id="loading" style="display:none;">
-                    <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="Loading...">
-                </div>
-            </div>
-
-            <!-- Gallery for Recently Processed Images -->
-            <div class="gallery">
-                <h2>Recently Processed Images</h2>
-                <div class="image-thumbnails">
-                    <img src="{{ url_for('static', filename='uploads/Thenuja.jpg') }}" alt="Image 1">
-                    <img src="{{ url_for('static', filename='uploads/image2.jpg') }}" alt="Image 2">
-                </div>
+                <!-- Display image details -->
+                {% if filename %}
+                <h3>Image Details:</h3>
+                <ul>
+                    <li>1. Image Dimensions: {{ details.width }} x {{ details.height }} pixels</li>
+                    {% if details.num_contours is not none %}
+                        <li>2. Number of Contours Detected: {{ details.num_contours }}</li>
+                    {% elif details.num_edges is not none %}
+                        <li>2. Number of Edge Pixels Detected: {{ details.num_edges }}</li>
+                    {% elif details.num_sobel_edges is not none %}
+                        <li>2. Number of Sobel Edge Pixels Detected: {{ details.num_sobel_edges }}</li>
+                    {% endif %}
+                    {% if details.processing_time is not none %}
+                        <li>3. Processing Time: {{ details.processing_time }} seconds</li>
+                    {% endif %}
+                    {% if damage_info %}
+                        <li>4. Damage Severity: {{ damage_info.severity }}</li>
+                        <li>5. Damage Percentage: {{ damage_info.damage_percentage }}%</li>
+                        <br><br><br>
+                        <li><a href="{{ url_for('static', filename='reports/' + damage_info.report_filename) }}" download>Download Damage Report</a></li>
+                    {% endif %}
+                </ul>
+                {% endif %}
             </div>
         </div>
 
-        <!-- Right Panel: Processed Image and Details -->
+        <!-- Right Panel: Processed Image -->
         <div class="right-panel">
             {% if filename %}
             <h2>Processed Image</h2>
+            <br><br>
             <div class="image-box">
                 <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Processed Image">
             </div>
+            <br>
             <p>{{ message }}</p> <!-- Display message after processing -->
-
-            <!-- Display image details -->
-            <h3>Image Details:</h3>
-            <ul>
-                <li>Image Dimensions: {{ details.width }} x {{ details.height }} pixels</li>
-                {% if details.num_contours is not none %}
-                    <li>Number of Contours Detected: {{ details.num_contours }}</li>
-                {% elif details.num_edges is not none %}
-                    <li>Number of Edge Pixels Detected: {{ details.num_edges }}</li>
-                {% elif details.num_sobel_edges is not none %}
-                    <li>Number of Sobel Edge Pixels Detected: {{ details.num_sobel_edges }}</li>
-                {% endif %}
-                {% if details.processing_time is not none %}
-                    <li>Processing Time: {{ details.processing_time }} seconds</li>
-                {% endif %}
-            </ul>
             {% endif %}
         </div>
     </div>
