@@ -124,8 +124,7 @@ def sobel_edge_detection(filepath):
 
 def mask_non_damage_areas(image):
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # Define color range for car body (adjust based on your dataset)
-    lower_body = np.array([0, 0, 50])  # Adjust based on the car body color
+    lower_body = np.array([0, 0, 50])
     upper_body = np.array([180, 255, 255])
     mask = cv2.inRange(hsv_image, lower_body, upper_body)
     masked_image = cv2.bitwise_and(image, image, mask=mask)
@@ -149,18 +148,12 @@ def generate_report(image_path, damage_info):
     pdf.add_page()
     pdf.set_font("Arial", size=12)
 
-    pdf.cell(200, 10, txt="Vehicle Damage Report", ln=True, align='C')
-    pdf.cell(200, 10, txt=f"Image File: {os.path.basename(image_path)}", ln=True)
-    pdf.cell(200, 10, txt=f"Damage Severity: {damage_info['severity']}", ln=True)
+    pdf.cell(200, 10, txt="Vehicle Damage Report", ln=True, align="C")
+    pdf.cell(200, 10, txt=f"Severity: {damage_info['severity']}", ln=True)
     pdf.cell(200, 10, txt=f"Damage Percentage: {damage_info['damage_percentage']}%", ln=True)
 
-    pdf_output_path = os.path.join(app.config['REPORT_FOLDER'], report_filename)
-    pdf.output(pdf_output_path)
+    pdf.output(os.path.join(app.config['REPORT_FOLDER'], report_filename))
     return report_filename
 
 if __name__ == '__main__':
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
-    if not os.path.exists(app.config['REPORT_FOLDER']):
-        os.makedirs(app.config['REPORT_FOLDER'])
     app.run(debug=True)
