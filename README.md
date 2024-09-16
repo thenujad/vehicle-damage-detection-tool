@@ -77,10 +77,6 @@ Adjust these settings in `app.py` if needed.
 - Werkzeug
 - FPDF
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgements
 
 - OpenCV for image processing capabilities.
